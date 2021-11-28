@@ -1,5 +1,6 @@
 import java.net.SocketTimeoutException;
 import java.util.Scanner;
+
 public class calculator {
     static int leftBound = 1;
 
@@ -13,13 +14,14 @@ public class calculator {
 
     public static void main(String[] args) throws Exception {
         while (true){
-            System.out.println("Введите выши данные");
+            System.out.println("Введите ваши данные");
             int num1 = getInt(true);
             validateNumber(num1);
             char operation = getOperation();
             int num2 = getInt(false);
             validateNumber(num2);
             int result = calc( num1, num2, operation);
+            validateResult(result);
             printResult(result);
         }
     }
@@ -90,30 +92,12 @@ public class calculator {
     }
 
     public static int convertRomanToArabic(String letter) throws Exception {
-        switch (letter){
-            case "I":
-                return 1;
-            case "II":
-                return 2;
-            case "III":
-                return 3;
-            case "IV":
-                return 4;
-            case "V":
-                return 5;
-            case "VI":
-                return 6;
-            case "VII":
-                return 7;
-            case "VIII":
-                return 8;
-            case "IX":
-                return 9;
-            case "X":
-                return 10;
-            default:
-                throw new ArrayIndexOutOfBoundsException(letter);
+        String[] romanLiterals = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        for(int i = 1; i < romanLiterals.length; ++i){
+            if(letter.equals(romanLiterals[i]))
+                return i;
         }
+        throw new NumberOutOfRangeException(letter);
     }
 
     public static String integerToRoman(int num) {
@@ -131,9 +115,13 @@ public class calculator {
         return roman.toString();
     }
 
-    private static void validateNumber(int number){
+    private static void validateNumber(int number) throws NumberOutOfRangeException {
         if(number < leftBound || number > rightBound)
-            throw new ArrayIndexOutOfBoundsException(number);
+            throw new NumberOutOfRangeException(number);
     }
 
+    private static void validateResult(int result) throws ResultOutOfRangeException {
+        if(!firstNumberIsArabian && !secondNumberIsArabian && result < 1)
+            throw new ResultOutOfRangeException(result);
+    }
 }
