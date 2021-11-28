@@ -3,4 +3,3 @@ public class NumberOutOfRangeException extends Exception{
         super("Number " + number.toString() + " is out of range");
     }
 }
-

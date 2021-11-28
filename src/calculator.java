@@ -1,7 +1,6 @@
-import java.net.SocketTimeoutException;
 import java.util.Scanner;
 
-public class calculator {
+public class Calculator {
     static int leftBound = 1;
 
     static int rightBound = 10;
@@ -11,29 +10,6 @@ public class calculator {
     static  boolean secondNumberIsArabian;
 
     static Scanner scanner = new Scanner(System.in);
-
-    public static void main(String[] args) throws Exception {
-        while (true){
-            System.out.println("Введите ваши данные");
-            int num1 = getInt(true);
-            validateNumber(num1);
-            char operation = getOperation();
-            int num2 = getInt(false);
-            validateNumber(num2);
-            int result = calc( num1, num2, operation);
-            validateResult(result);
-            printResult(result);
-        }
-    }
-    private static void printResult(int result) throws Exception{
-        if(firstNumberIsArabian && secondNumberIsArabian){
-            System.out.println(result);
-        } else if (!firstNumberIsArabian && !secondNumberIsArabian){
-            System.out.println(integerToRoman(result));
-        } else {
-            throw new Exception("Числа разного формата!");
-        }
-    }
 
     public static int getInt(boolean firstNumber) throws Exception {
         int num;
@@ -53,10 +29,11 @@ public class calculator {
                 secondNumberIsArabian = false;
         }
         else {
-            System.out.println(" вы педик затупили");
+            System.out.println("Введите числа от 1 до 10");
             scanner.next();
             num = getInt(firstNumber);
         }
+        validateNumber(num);
         return num;
     }
     public static char getOperation() {
@@ -70,7 +47,17 @@ public class calculator {
         return operation;
     }
 
-    public static int calc(int num1, int num2, char operation) {
+    public static void printResult(int result) throws Exception{
+        if(firstNumberIsArabian && secondNumberIsArabian){
+            System.out.println(result);
+        } else if (!firstNumberIsArabian && !secondNumberIsArabian){
+            System.out.println(integerToRoman(result));
+        } else {
+            throw new DifferentNumbersFormatException();
+        }
+    }
+
+    public static int calc(int num1, int num2, char operation) throws ResultOutOfRangeException {
         int result;
         switch (operation) {
             case '+':
@@ -88,6 +75,7 @@ public class calculator {
             default:
                 result = calc(num1, num2, getOperation());
         }
+        validateResult(result);
         return result;
     }
 
@@ -124,4 +112,5 @@ public class calculator {
         if(!firstNumberIsArabian && !secondNumberIsArabian && result < 1)
             throw new ResultOutOfRangeException(result);
     }
+
 }
